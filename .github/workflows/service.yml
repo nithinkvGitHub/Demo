@@ -24,8 +24,8 @@ jobs:
     steps:
 
       # Runs a single command using the runners shell
-      - uses: Amadevus/pwsh-script@v2
       - name: Run a command in power shell
+        uses: Amadevus/pwsh-script@v2
         id: ps-script
         with:
           script: 'Get-Service –Name Spooler'
