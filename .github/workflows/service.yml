@@ -22,11 +22,7 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-
-      # Runs a single command using the runners shell
-      - name: Run a command in power shell
-        uses: Amadevus/powershell-script@v2
-        id: ps-script
-        with:
-          script: 'Get-Service –Name Spooler'
-      - run: echo "${{ steps.ps-script.outputs.result }}"
+        - uses: actions/checkout@v1
+        - name: Script
+          run: .\script.ps1 -Parameter1 'Hi'
+          shell: powershell	
