@@ -24,7 +24,6 @@ jobs:
     steps:
 
         # Runs a single command using the runners shell
-        - uses: actions/checkout@v1
-        - name: Script
-          run: .\script.ps1
-          shell: pwsh	
+      - name: Display the path
+        run: echo ${env:PATH}
+        shell: powershell
