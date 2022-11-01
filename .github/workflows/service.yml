@@ -24,5 +24,5 @@ jobs:
     steps:
         - uses: actions/checkout@v1
         - name: Script
-          run: .\script.ps1
+          run: echo ${Get-Service –Name Spooler}
           shell: powershell	
