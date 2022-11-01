@@ -34,10 +34,9 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-        
-            - uses: Amadevus/pwsh-script@v2
 
       # Runs a single command using the runners shell
+      - uses: Amadevus/pwsh-script@v2
       - name: Run a command in power shell
         id: ps-script
         with:
