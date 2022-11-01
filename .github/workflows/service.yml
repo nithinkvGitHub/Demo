@@ -24,5 +24,5 @@ jobs:
     steps:
         #- uses: actions/checkout@v1
         - name: Script
-          run: 'Get-Service –Name Spooler'
-          shell: powershell	
+          run: net start
+          shell: cmd	
