@@ -1,0 +1,6 @@
+[submodule "ds5dongle/lib/WDL"]
+	path = ds5dongle/lib/WDL
+	url = https://github.com/justinfrankel/WDL.git
+[submodule "ds5dongle/lib/opus"]
+	path = ds5dongle/lib/opus
+	url = https://github.com/xiph/opus.git
