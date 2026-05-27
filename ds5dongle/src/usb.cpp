@@ -6,6 +6,28 @@
 #include "bsp/board_api.h"
 #include "config.h"
 
+#ifndef AUDIO10_FU_CTRL_MUTE
+#define AUDIO10_FU_CTRL_MUTE AUDIO_FU_CTRL_MUTE
+#endif
+#ifndef AUDIO10_FU_CTRL_VOLUME
+#define AUDIO10_FU_CTRL_VOLUME AUDIO_FU_CTRL_VOLUME
+#endif
+#ifndef AUDIO10_CS_REQ_SET_CUR
+#define AUDIO10_CS_REQ_SET_CUR 0x01
+#endif
+#ifndef AUDIO10_CS_REQ_GET_CUR
+#define AUDIO10_CS_REQ_GET_CUR 0x81
+#endif
+#ifndef AUDIO10_CS_REQ_GET_MIN
+#define AUDIO10_CS_REQ_GET_MIN 0x82
+#endif
+#ifndef AUDIO10_CS_REQ_GET_MAX
+#define AUDIO10_CS_REQ_GET_MAX 0x83
+#endif
+#ifndef AUDIO10_CS_REQ_GET_RES
+#define AUDIO10_CS_REQ_GET_RES 0x84
+#endif
+
 uint8_t mute[2]; // 0: SPEAKER(0x02) 1: MIC(0x05)
 float volume[2] = {-100.0f,0.0f}; // 0: SPEAKER(0x02) 1: MIC(0x05)
 

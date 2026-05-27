@@ -17,6 +17,8 @@ This project is based on [awalol/DS5Dongle](https://github.com/awalol/DS5Dongle)
 
 ## Building
 
+Required host tools include CMake, Ninja, `gcc-arm-none-eabi`, and a native C++ compiler such as `g++`. If `PICO_SDK_PATH` is not set, pass `-DPICO_SDK_FETCH_FROM_GIT=ON` to let CMake fetch the Pico SDK.
+
 Initialize dependencies from the repository root:
 
 ```sh
@@ -27,7 +29,7 @@ Build for Raspberry Pi Pico 2 W:
 
 ```sh
 cd ds5dongle
-cmake -S . -B build-pico2w
+cmake -S . -B build-pico2w -G Ninja -DPICO_SDK_FETCH_FROM_GIT=ON
 cmake --build build-pico2w
 ```
 
@@ -35,15 +37,18 @@ Build for Waveshare RP2350B-Plus-W:
 
 ```sh
 cd ds5dongle
-cmake -S . -B build-waveshare -DWAVESHARE_RP2350B_PLUS_W=ON
+cmake -S . -B build-waveshare -G Ninja \
+  -DWAVESHARE_RP2350B_PLUS_W=ON \
+  -DPICO_SDK_FETCH_FROM_GIT=ON
 cmake --build build-waveshare
 ```
 
 If a board is unstable at the default overclock, lower the clock without editing code:
 
 ```sh
-cmake -S . -B build-waveshare \
+cmake -S . -B build-waveshare -G Ninja \
   -DWAVESHARE_RP2350B_PLUS_W=ON \
+  -DPICO_SDK_FETCH_FROM_GIT=ON \
   -DDS5_SYS_CLOCK_KHZ=300000
 cmake --build build-waveshare
 ```
@@ -51,8 +56,9 @@ cmake --build build-waveshare
 You can also select a different Pico SDK vreg enum if your hardware needs it:
 
 ```sh
-cmake -S . -B build-waveshare \
+cmake -S . -B build-waveshare -G Ninja \
   -DWAVESHARE_RP2350B_PLUS_W=ON \
+  -DPICO_SDK_FETCH_FROM_GIT=ON \
   -DDS5_VREG_VOLTAGE=VREG_VOLTAGE_1_25
 cmake --build build-waveshare
 ```

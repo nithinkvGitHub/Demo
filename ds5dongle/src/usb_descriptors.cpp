@@ -49,12 +49,7 @@ enum {
 #endif
     ITF_NUM_TOTAL,
 
-    CONFIG_DESC_LEN_AUDIO_IAD =
-#if ENABLE_SERIAL
-        8,
-#else
-        0,
-#endif
+    CONFIG_DESC_LEN_AUDIO_IAD = 8,
     CONFIG_DESC_LEN_BASE = 0x00E3 + CONFIG_DESC_LEN_AUDIO_IAD,
     CONFIG_DESC_LEN_TOTAL = CONFIG_DESC_LEN_BASE
 #if ENABLE_SERIAL
@@ -128,7 +123,6 @@ uint8_t descriptor_configuration[] = {
     0xC0, // bmAttributes: SELF-POWERED, NO REMOTE-WAKEUP
     0xFA, // bMaxPower: 500mA (250 * 2mA)
 
-#if ENABLE_SERIAL
     // --- INTERFACE ASSOCIATION DESCRIPTOR: Audio function (interfaces 0-2) ---
     0x08, // bLength
     TUSB_DESC_INTERFACE_ASSOCIATION, // bDescriptorType
@@ -139,7 +133,6 @@ uint8_t descriptor_configuration[] = {
     0x00, // bFunctionProtocol
     0x00, // iFunction
 
-#endif
     // --- INTERFACE DESCRIPTOR (0.0): Audio Control ---
     0x09, // bLength
     0x04, // bDescriptorType (INTERFACE)
