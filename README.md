@@ -11,6 +11,8 @@ surface:
 - Windows Service that starts with the machine.
 - WPF UI for configuring the dongle.
 - Profile storage and profile apply commands.
+- Automatic game/app rules for DS5 HID, DirectInput HID, and Xbox/XInput-style
+  mode selection.
 - UF2 firmware update flow that reboots the Pico into `RPI-RP2` bootloader mode.
 - Local named-pipe API between UI and service.
 
@@ -23,6 +25,8 @@ surface:
 - `src/PicoCompanion.Ui` - WPF configuration and firmware update UI.
 - `docs/windows-companion.md` - build, install, configuration, and update flow.
 - `docs/pico-control-protocol.md` - firmware control protocol draft.
+- `docs/xbox-ds5-mode-switching.md` - Xbox app/Game Bar and native DS5 mode
+  switching notes.
 
 ## Build on Windows
 

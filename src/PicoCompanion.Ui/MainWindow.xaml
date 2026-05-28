@@ -24,6 +24,10 @@
                                Margin="0,4,0,0"
                                Foreground="#FFD8DEE9"
                                Text="Service status unknown" />
+                    <TextBlock x:Name="GameModeText"
+                               Margin="0,2,0,0"
+                               Foreground="#FFA3BE8C"
+                               Text="Mode status unknown" />
                 </StackPanel>
 
                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
@@ -37,6 +41,8 @@
             <TabItem Header="Configuration">
                 <Grid Margin="12">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -70,11 +76,48 @@
                               Margin="0,0,0,8"
                               Content="Allow USB remote wake when host enables it" />
 
-                    <TextBlock Grid.Row="4"
+                    <CheckBox x:Name="AutoModeSwitchingBox"
+                              Grid.Row="4"
+                              Grid.Column="1"
+                              Margin="0,0,0,8"
+                              Content="Automatically switch DS5/XInput mode based on running game" />
+
+                    <TextBlock Grid.Row="5" Grid.Column="0" Margin="0,0,8,8" Text="Default output mode" />
+                    <ComboBox x:Name="DefaultOutputModeBox"
+                              Grid.Row="5"
+                              Grid.Column="1"
+                              Margin="0,0,0,8" />
+
+                    <TextBlock Grid.Row="6"
                                Grid.Column="1"
                                TextWrapping="Wrap"
                                Foreground="#FF4C566A"
                                Text="The Windows service stores configuration and sends it to the Pico when connected. USB wake and controller reconnect still remain firmware responsibilities so the dongle can behave correctly while Windows sleeps." />
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Game Modes">
+                <Grid Margin="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="260" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <ListBox x:Name="GameRulesList"
+                             Grid.Column="0"
+                             DisplayMemberPath="DisplayName"
+                             SelectionChanged="GameRulesList_SelectionChanged" />
+
+                    <StackPanel Grid.Column="1" Margin="16,0,0,0">
+                        <TextBlock Text="Automatic mode switching" FontWeight="SemiBold" />
+                        <TextBlock x:Name="GameRuleDetailsText"
+                                   Margin="0,8,0,16"
+                                   TextWrapping="Wrap"
+                                   Text="Select a game rule to view matching details." />
+                        <TextBlock TextWrapping="Wrap"
+                                   Foreground="#FF4C566A"
+                                   Text="Xbox app and Game Bar navigation usually need XInput. Games with native DualSense support should use NativeDualSenseHid/DInputHid. Exact Xbox library detection is not guaranteed by a stable public API, so rules match foreground process, package family name, or executable path." />
+                    </StackPanel>
                 </Grid>
             </TabItem>
 

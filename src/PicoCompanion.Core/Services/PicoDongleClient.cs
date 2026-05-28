@@ -91,6 +91,12 @@ public sealed class PicoDongleClient
         CancellationToken cancellationToken) =>
         SendJsonAsync(transport, PicoCommands.SetProfile, profile, cancellationToken);
 
+    public Task SetOutputModeAsync(
+        IDongleTransport transport,
+        ControllerOutputMode outputMode,
+        CancellationToken cancellationToken) =>
+        SendJsonAsync(transport, PicoCommands.SetOutputMode, new { outputMode }, cancellationToken);
+
     public Task EnterBootloaderAsync(IDongleTransport transport, CancellationToken cancellationToken) =>
         transport.SendCommandAsync(PicoCommands.EnterBootloader, string.Empty, cancellationToken);
 

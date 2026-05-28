@@ -6,6 +6,8 @@ public sealed record ControllerProfile
 
     public string Name { get; init; } = "Default";
 
+    public ControllerOutputMode PreferredOutputMode { get; init; } = ControllerOutputMode.NativeDualSenseHid;
+
     public bool LowLatencyMode { get; init; } = true;
 
     public bool EnableAudio { get; init; }

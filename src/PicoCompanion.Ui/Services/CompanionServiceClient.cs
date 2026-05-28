@@ -17,6 +17,9 @@ public sealed class CompanionServiceClient
     public Task<DongleStatus> GetStatusAsync(CancellationToken cancellationToken) =>
         SendForPayloadAsync<DongleStatus>(CompanionRequest.Create("getStatus"), cancellationToken);
 
+    public Task<GameModeStatus> GetGameModeStatusAsync(CancellationToken cancellationToken) =>
+        SendForPayloadAsync<GameModeStatus>(CompanionRequest.Create("getGameModeStatus"), cancellationToken);
+
     public Task<DongleConfiguration> GetConfigurationAsync(CancellationToken cancellationToken) =>
         SendForPayloadAsync<DongleConfiguration>(CompanionRequest.Create("getConfig"), cancellationToken);
 

@@ -13,6 +13,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        DefaultOutputModeBox.ItemsSource = Enum.GetValues<ControllerOutputMode>();
         Loaded += async (_, _) => await RefreshAsync().ConfigureAwait(true);
     }
 
@@ -54,6 +55,7 @@ public partial class MainWindow : Window
         }
 
         ProfileDetailsText.Text =
+            $"Preferred mode: {profile.PreferredOutputMode}\n" +
             $"Low latency: {profile.LowLatencyMode}\n" +
             $"Audio: {profile.EnableAudio}\n" +
             $"Haptics: {profile.EnableHaptics}\n" +
@@ -62,19 +64,44 @@ public partial class MainWindow : Window
             profile.Notes;
     }
 
+    private void GameRulesList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+    {
+        if (GameRulesList.SelectedItem is not GameModeRule rule)
+        {
+            GameRuleDetailsText.Text = "Select a game rule to view matching details.";
+            return;
+        }
+
+        GameRuleDetailsText.Text =
+            $"Output mode: {rule.OutputMode}\n" +
+            $"Profile: {rule.ProfileId}\n" +
+            $"Foreground only: {rule.MatchForegroundOnly}\n" +
+            $"Processes: {FormatList(rule.ProcessNames)}\n" +
+            $"Package families: {FormatList(rule.PackageFamilyNames)}\n" +
+            $"Executable paths: {FormatList(rule.ExecutablePaths)}\n\n" +
+            rule.Notes;
+    }
+
     private async Task RefreshAsync(CancellationToken cancellationToken = default)
     {
         var status = await _client.GetStatusAsync(cancellationToken).ConfigureAwait(true);
+        var gameModeStatus = await _client.GetGameModeStatusAsync(cancellationToken).ConfigureAwait(true);
         _configuration = await _client.GetConfigurationAsync(cancellationToken).ConfigureAwait(true);
 
         StatusText.Text = status.IsConnected
             ? $"Connected on {status.PortName} | firmware {status.FirmwareVersion} | {status.PairingState}"
             : $"Disconnected{FormatError(status.LastError)}";
 
+        GameModeText.Text =
+            $"Mode: {gameModeStatus.CurrentOutputMode} | rule: {gameModeStatus.ActiveRuleName}";
+
         DeviceNameBox.Text = _configuration.DeviceName;
         ControllerAddressBox.Text = _configuration.PreferredControllerAddress;
         AutoReconnectBox.IsChecked = _configuration.AutoReconnect;
         UsbWakeBox.IsChecked = _configuration.EnableUsbRemoteWake;
+        AutoModeSwitchingBox.IsChecked = _configuration.EnableAutomaticModeSwitching;
+        DefaultOutputModeBox.SelectedItem = _configuration.DefaultOutputMode;
+        GameRulesList.ItemsSource = _configuration.GameModeRules;
         ProfilesList.ItemsSource = _configuration.Profiles;
         ProfilesList.SelectedItem = _configuration.Profiles
             .FirstOrDefault(profile => profile.Id == _configuration.ActiveProfileId);
@@ -89,7 +116,11 @@ public partial class MainWindow : Window
             DeviceName = DeviceNameBox.Text.Trim(),
             PreferredControllerAddress = ControllerAddressBox.Text.Trim(),
             AutoReconnect = AutoReconnectBox.IsChecked == true,
-            EnableUsbRemoteWake = UsbWakeBox.IsChecked == true
+            EnableUsbRemoteWake = UsbWakeBox.IsChecked == true,
+            EnableAutomaticModeSwitching = AutoModeSwitchingBox.IsChecked == true,
+            DefaultOutputMode = DefaultOutputModeBox.SelectedItem is ControllerOutputMode outputMode
+                ? outputMode
+                : ControllerOutputMode.NativeDualSenseHid
         };
 
         await _client.SaveConfigurationAsync(_configuration, cancellationToken).ConfigureAwait(true);
@@ -150,4 +181,10 @@ public partial class MainWindow : Window
 
     private static string FormatError(string error) =>
         string.IsNullOrWhiteSpace(error) ? string.Empty : $" | {error}";
+
+    private static string FormatList(IEnumerable<string> values)
+    {
+        var materialized = values.Where(value => !string.IsNullOrWhiteSpace(value)).ToArray();
+        return materialized.Length == 0 ? "(none)" : string.Join(", ", materialized);
+    }
 }

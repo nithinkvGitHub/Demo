@@ -104,6 +104,7 @@ public sealed class NamedPipeCommandService : BackgroundService
         return request.Command switch
         {
             "getStatus" => CompanionResponse.Ok(_runtimeState.Status),
+            "getGameModeStatus" => CompanionResponse.Ok(_runtimeState.GameModeStatus),
             "getConfig" => CompanionResponse.Ok(await _configurationStore.LoadAsync(cancellationToken)
                 .ConfigureAwait(false)),
             "saveConfig" => await SaveConfigAsync(request, cancellationToken).ConfigureAwait(false),

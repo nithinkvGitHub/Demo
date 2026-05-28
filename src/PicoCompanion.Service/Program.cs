@@ -14,6 +14,8 @@ builder.Services
     .AddSingleton<SerialDongleTransportFactory>()
     .AddSingleton<PicoDongleClient>()
     .AddSingleton<Uf2FirmwareUpdater>()
+    .AddSingleton<IForegroundApplicationDetector, WindowsApplicationDetector>()
+    .AddSingleton<GameModeRuleMatcher>()
     .AddSingleton<DongleRuntimeState>()
     .AddSingleton(sp =>
     {
@@ -22,6 +24,7 @@ builder.Services
             Path.Combine(options.DataDirectory, "dongle-config.json"));
     })
     .AddHostedService<DongleMonitorService>()
+    .AddHostedService<ProcessModeMonitorService>()
     .AddHostedService<NamedPipeCommandService>();
 
 await builder.Build().RunAsync().ConfigureAwait(false);

@@ -59,6 +59,31 @@ payload, persist it safely, and reply `OK` only after it is durable.
 Payload is a single `ControllerProfile`. Firmware should apply runtime-only
 settings immediately and persist the selected profile if required.
 
+### `SET_OUTPUT_MODE <payload>`
+
+Payload selects the controller presentation mode:
+
+```json
+{
+  "outputMode": "NativeDualSenseHid"
+}
+```
+
+Supported values in the Windows companion model:
+
+- `NativeDualSenseHid` - firmware presents as a DualSense-compatible USB HID
+  device for games with native DS5 support.
+- `DInputHid` - firmware presents as a generic DirectInput/HID gamepad.
+- `XInputVirtual` - host-side virtual Xbox/XInput output is expected. Firmware
+  should either switch to a control-only/raw-input role or to a descriptor that
+  the host-side mapper can hide from games to avoid double input.
+- `Disabled` - no gameplay reports should be exposed.
+
+The Pico alone should not pretend to be a licensed Xbox controller unless the
+project has a legally supported firmware/device path. For normal Windows XInput
+compatibility, the companion stack should use a signed virtual controller driver
+or supported virtual gamepad framework on the PC.
+
 ### `ENTER_BOOTLOADER`
 
 Firmware disconnects from the normal USB interface and enters the RP2350 UF2

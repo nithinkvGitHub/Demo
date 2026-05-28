@@ -8,8 +8,11 @@ public sealed class DongleRuntimeState : IAsyncDisposable
     private readonly SemaphoreSlim _gate = new(1, 1);
     private IDongleTransport? _transport;
     private DongleStatus _status = DongleStatus.Disconnected();
+    private GameModeStatus _gameModeStatus = new();
 
     public DongleStatus Status => _status;
+
+    public GameModeStatus GameModeStatus => _gameModeStatus;
 
     public async Task SetConnectionAsync(
         DongleStatus status,
@@ -70,6 +73,21 @@ public sealed class DongleRuntimeState : IAsyncDisposable
             }
 
             await action(_transport).ConfigureAwait(false);
+        }
+        finally
+        {
+            _gate.Release();
+        }
+    }
+
+    public async Task SetGameModeStatusAsync(
+        GameModeStatus status,
+        CancellationToken cancellationToken)
+    {
+        await _gate.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            _gameModeStatus = status;
         }
         finally
         {

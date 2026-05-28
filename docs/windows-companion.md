@@ -13,7 +13,8 @@ like hardware when Windows is sleeping or booting.
 - `PicoCompanion.Service` runs as a Windows Service at startup. It probes the
   Pico control channel, stores configuration in
   `%ProgramData%\PicoCompanion\dongle-config.json`, applies profiles, sends
-  reboot/update commands, and copies UF2 firmware to `RPI-RP2`.
+  reboot/update commands, copies UF2 firmware to `RPI-RP2`, and monitors the
+  foreground game/app for automatic output mode switching.
 - `PicoCompanion.Ui` is a WPF app for normal users. It talks to the service over
   the local named pipe `PicoCompanion.Service`.
 
@@ -48,12 +49,25 @@ To remove it:
 
 1. Start the `PicoCompanion.Ui` WPF application.
 2. Confirm the status line shows the Pico control port and firmware version.
-3. Change configuration or apply a profile.
+3. Change configuration, select the default output mode, or apply a profile.
 4. Click **Save Configuration**.
 
 The service persists the config first, then sends it to the Pico when connected.
 If the dongle is not connected, the saved config remains available and can be
 applied on the next connection.
+
+## Automatic Xbox/DS5 mode switching
+
+The service can switch between `NativeDualSenseHid`, `DInputHid`, and
+`XInputVirtual` based on configured game rules. Rules match process names,
+package family names, or executable paths. This is the practical way to support
+Xbox app/Game Bar navigation while still using native DS5 mode for games that
+support DualSense features.
+
+See [xbox-ds5-mode-switching.md](xbox-ds5-mode-switching.md) for the limits:
+Windows does not provide a perfect Xbox library compatibility API, and true
+system-wide XInput output still requires a signed virtual controller path or a
+legally supported firmware/device mode.
 
 ## Update firmware
 
