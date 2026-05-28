@@ -1,0 +1,182 @@
+<Window x:Class="PicoCompanion.Ui.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Pico Companion"
+        Height="560"
+        Width="760"
+        MinHeight="520"
+        MinWidth="700">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Border Padding="12" Background="#FF101820" CornerRadius="6">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Left">
+                    <TextBlock Text="Pico DS5 Dongle Companion"
+                               Foreground="White"
+                               FontSize="20"
+                               FontWeight="SemiBold" />
+                    <TextBlock x:Name="StatusText"
+                               Margin="0,4,0,0"
+                               Foreground="#FFD8DEE9"
+                               Text="Service status unknown" />
+                    <TextBlock x:Name="GameModeText"
+                               Margin="0,2,0,0"
+                               Foreground="#FFA3BE8C"
+                               Text="Mode status unknown" />
+                </StackPanel>
+
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                    <Button Content="Refresh" Width="96" Margin="8,0,0,0" Click="Refresh_Click" />
+                    <Button Content="Reboot Pico" Width="112" Margin="8,0,0,0" Click="Reboot_Click" />
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <TabControl Grid.Row="1" Margin="0,16,0,16">
+            <TabItem Header="Configuration">
+                <Grid Margin="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="220" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,0,8,8" Text="Dongle name" />
+                    <TextBox x:Name="DeviceNameBox" Grid.Row="0" Grid.Column="1" Margin="0,0,0,8" />
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,0,8,8" Text="Preferred controller address" />
+                    <TextBox x:Name="ControllerAddressBox"
+                             Grid.Row="1"
+                             Grid.Column="1"
+                             Margin="0,0,0,8"
+                             ToolTip="Bluetooth address saved by firmware, if known." />
+
+                    <CheckBox x:Name="AutoReconnectBox"
+                              Grid.Row="2"
+                              Grid.Column="1"
+                              Margin="0,0,0,8"
+                              Content="Auto reconnect to trusted controller" />
+
+                    <CheckBox x:Name="UsbWakeBox"
+                              Grid.Row="3"
+                              Grid.Column="1"
+                              Margin="0,0,0,8"
+                              Content="Allow USB remote wake when host enables it" />
+
+                    <CheckBox x:Name="AutoModeSwitchingBox"
+                              Grid.Row="4"
+                              Grid.Column="1"
+                              Margin="0,0,0,8"
+                              Content="Automatically switch DS5/XInput mode based on running game" />
+
+                    <TextBlock Grid.Row="5" Grid.Column="0" Margin="0,0,8,8" Text="Default output mode" />
+                    <ComboBox x:Name="DefaultOutputModeBox"
+                              Grid.Row="5"
+                              Grid.Column="1"
+                              Margin="0,0,0,8" />
+
+                    <TextBlock Grid.Row="6"
+                               Grid.Column="1"
+                               TextWrapping="Wrap"
+                               Foreground="#FF4C566A"
+                               Text="The Windows service stores configuration and sends it to the Pico when connected. USB wake and controller reconnect still remain firmware responsibilities so the dongle can behave correctly while Windows sleeps." />
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Game Modes">
+                <Grid Margin="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="260" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <ListBox x:Name="GameRulesList"
+                             Grid.Column="0"
+                             DisplayMemberPath="DisplayName"
+                             SelectionChanged="GameRulesList_SelectionChanged" />
+
+                    <StackPanel Grid.Column="1" Margin="16,0,0,0">
+                        <TextBlock Text="Automatic mode switching" FontWeight="SemiBold" />
+                        <TextBlock x:Name="GameRuleDetailsText"
+                                   Margin="0,8,0,16"
+                                   TextWrapping="Wrap"
+                                   Text="Select a game rule to view matching details." />
+                        <TextBlock TextWrapping="Wrap"
+                                   Foreground="#FF4C566A"
+                                   Text="Xbox app and Game Bar navigation usually need XInput. Games with native DualSense support should use NativeDualSenseHid/DInputHid. Exact Xbox library detection is not guaranteed by a stable public API, so rules match foreground process, package family name, or executable path." />
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Profiles">
+                <Grid Margin="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="230" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <ListBox x:Name="ProfilesList"
+                             Grid.Column="0"
+                             DisplayMemberPath="Name"
+                             SelectionChanged="ProfilesList_SelectionChanged" />
+
+                    <StackPanel Grid.Column="1" Margin="16,0,0,0">
+                        <TextBlock Text="Selected profile" FontWeight="SemiBold" />
+                        <TextBlock x:Name="ProfileDetailsText"
+                                   Margin="0,8,0,16"
+                                   TextWrapping="Wrap"
+                                   Text="Select a profile to view settings." />
+                        <Button Content="Apply Selected Profile"
+                                Width="170"
+                                HorizontalAlignment="Left"
+                                Click="ApplyProfile_Click" />
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Firmware">
+                <StackPanel Margin="12">
+                    <TextBlock Text="Firmware update"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,8" />
+                    <TextBlock TextWrapping="Wrap"
+                               Margin="0,0,0,12"
+                               Text="Choose a UF2 image. The service will ask the Pico firmware to enter BOOTSEL mode, copy the UF2 to the RPI-RP2 drive, then wait for the dongle to reconnect." />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox x:Name="FirmwarePathBox" Width="520" IsReadOnly="True" />
+                        <Button Content="Browse..." Width="96" Margin="8,0,0,0" Click="BrowseFirmware_Click" />
+                    </StackPanel>
+                    <Button Content="Update Firmware"
+                            Width="140"
+                            Margin="0,12,0,0"
+                            HorizontalAlignment="Left"
+                            Click="UpdateFirmware_Click" />
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+
+        <DockPanel Grid.Row="2">
+            <TextBlock x:Name="MessageText"
+                       DockPanel.Dock="Left"
+                       VerticalAlignment="Center"
+                       Text="Ready" />
+            <Button Content="Save Configuration"
+                    DockPanel.Dock="Right"
+                    Width="150"
+                    Click="SaveConfiguration_Click" />
+        </DockPanel>
+    </Grid>
+</Window>
