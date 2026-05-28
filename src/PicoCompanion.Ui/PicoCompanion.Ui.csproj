@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>PicoCompanion.Ui</AssemblyName>
+    <RootNamespace>PicoCompanion.Ui</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PicoCompanion.Core\PicoCompanion.Core.csproj" />
+  </ItemGroup>
+</Project>
